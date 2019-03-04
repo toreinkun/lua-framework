@@ -1,23 +1,38 @@
+--[[
+    MIT License
+
+    GitHub: https://github.com/toreinkun/lua-framework
+
+    Author: HIBIKI <toreinkun@gmail.com>
+
+    Copyright (c) 2018 HIBIKI <toreinkun@gmail.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+]]
+
 require "spec.lunit"
 require "spec.lunit-console"
-package.cpath = package.cpath .. 'C:/Users/panzhihao/.vscode/extensions/kangping.luaide-0.7.5/runtime/win32/?.dll'
-local g = require ("lfs")
--- local f = assert(package.loadlib("lfs.dll", "luaopen_lfs"))
-for entry in lfs.dir(rootpath) do
-    if entry ~= "." and entry ~= ".." then
-        local path = rootpath .. "\\" .. entry
-        local attr = lfs.attributes(path)
-        --print(path)
-        local filename = getFileName(entry)
 
-        if attr.mode ~= "directory" then
-            local postfix = getExtension(entry)
-            print(filename .. "\t" .. attr.mode .. "\t" .. postfix)
-        else
-            print(filename .. "\t" .. attr.mode)
-            fun(path)
-        end
-    end
+function unload(modulename)
+    package.loaded[modulename] = nil
 end
+
+require "spec.core.string_spec"
 
 lunit.main()
