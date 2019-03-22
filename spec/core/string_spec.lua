@@ -5,7 +5,7 @@
 
     Author: HIBIKI <toreinkun@gmail.com>
 
-    Copyright (c) 2018 HIBIKI <toreinkun@gmail.com>
+    Copyright (c) 2018-Now HIBIKI <toreinkun@gmail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-
 local module = module
 local os = os
 local print = print
@@ -539,13 +538,13 @@ function testTrimNoSpaceString()
     local input = "I我わたし"
     local result = string.ltrim(input)
     assert_equal("I我わたし", result)
-end 
+end
 
 function testTrimExistsTopSpaceString()
     local input = "  \t\n\f\r   I我わたし"
     local result = string.ltrim(input)
     assert_equal("I我わたし", result)
-end 
+end
 
 function testTrimExistsTailSpaceString()
     local input = "I我わたし \t \n\f"
@@ -599,13 +598,13 @@ function testTrimNoSpaceString()
     local input = "I我わたし"
     local result = string.rtrim(input)
     assert_equal("I我わたし", result)
-end 
+end
 
 function testTrimExistsTopSpaceString()
     local input = "  \t\n\f\r   I我わたし"
     local result = string.rtrim(input)
     assert_equal("  \t\n\f\r   I我わたし", result)
-end 
+end
 
 function testTrimExistsTailSpaceString()
     local input = "I我わたし \t \n\f \r"
@@ -659,13 +658,13 @@ function testTrimNoSpaceString()
     local input = "I我わたし"
     local result = string.trim(input)
     assert_equal("I我わたし", result)
-end 
+end
 
 function testTrimExistsTopSpaceString()
     local input = "  \t\n\f\r   I我わたし"
     local result = string.trim(input)
     assert_equal("I我わたし", result)
-end 
+end
 
 function testTrimExistsTailSpaceString()
     local input = "I我わたし \t \n\f \r"
@@ -719,19 +718,19 @@ function testTopLowerCaseString()
     local input = "abc"
     local result = string.ucfirst(input)
     assert_equal("Abc", result)
-end 
+end
 
 function testTopUpperCaseString()
     local input = "Abc"
     local result = string.ucfirst(input)
     assert_equal("Abc", result)
-end 
+end
 
 function testUtf8String()
     local input = "我わたし"
     local result = string.ucfirst(input)
     assert_equal(input, result)
-end 
+end
 
 function testErrorInputString()
     assert_error(
@@ -768,19 +767,19 @@ function testEncodeNoneSpecialCharString()
     local input = "abcdefghijklmn"
     local result = string.urlencode(input)
     assert_equal(input, result)
-end 
+end
 
 function testEncodeSpecialCharString()
     local input = "Abc \\H.ged.><%21"
     local result = string.urlencode(input)
     assert_equal("Abc+%5CH.ged.%3E%3C%2521", result)
-end 
+end
 
 function testEncodeUtf8String()
     local input = "我わたし \\H.ged.><%21+"
     local result = string.urlencode(input)
     assert_equal("%E6%88%91%E3%82%8F%E3%81%9F%E3%81%97+%5CH.ged.%3E%3C%2521%2B", result)
-end 
+end
 
 function testErrorInputString()
     assert_error(
@@ -817,19 +816,19 @@ function testDecodeNoneSpecialCharString()
     local input = "abcdefghijklmn"
     local result = string.urldecode(input)
     assert_equal(input, result)
-end 
+end
 
 function testDecodeSpecialCharString()
     local input = "Abc+%5CH.ged.%3E%3C%2521"
     local result = string.urldecode(input)
     assert_equal("Abc \\H.ged.><%21", result)
-end 
+end
 
 function testDecodeUtf8String()
     local input = "%E6%88%91%E3%82%8F%E3%81%9F%E3%81%97+%5CH.ged.%3E%3C%2521%2B"
     local result = string.urldecode(input)
     assert_equal("我わたし \\H.ged.><%21+", result)
-end 
+end
 
 function testErrorInputString()
     assert_error(
@@ -866,13 +865,13 @@ function testGetEnglishStringLength()
     local input = "abcdefghijklmn"
     local result = string.utf8len(input)
     assert_equal(14, result)
-end 
+end
 
 function testGetUtf8StringLength()
     local input = "我わたし "
     local result = string.utf8len(input)
     assert_equal(5, result)
-end 
+end
 
 function testErrorInputString()
     assert_error(
@@ -900,42 +899,6 @@ function teardown()
 end
 
 function testGetEmptySubString()
-
-local input = [==[                     MIT License 
-
-GitHub: https://github.com/toreinkun/lua-framework
-
-Author: HIBIKI <toreinkun@gmail.com>
-
-Copyright (c) 2018 HIBIKI <toreinkun@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.                       ]==]
-
-for i = 1 ,10 do 
-    input = input .. input
-end 
-    for i = 1, 10 do 
-        local t= os.clock() 
-        string.trim(input)
-        print("t", os.clock() - t)
-    end 
-
     local input = ""
     local result = string.utf8str(input, 1)
     assert_equal("", result)
@@ -945,181 +908,181 @@ function testGetEnglishSubString()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 3)
     assert_equal("cdefghijklmn", result)
-end 
+end
 
 function testGetEnglishSubStringWithMinusIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, -1)
     assert_equal("n", result)
-end 
+end
 
 function testGetEnglishSubStringWithZeroIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 0)
     assert_equal("abcdefghijklmn", result)
-end 
+end
 
 function testGetEnglishSubStringWithFirstIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 1)
     assert_equal("abcdefghijklmn", result)
-end 
+end
 
 function testGetEnglishSubStringWithLastIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 14)
     assert_equal("n", result)
-end 
+end
 
 function testGetEnglishSubStringWithLargerIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 20)
     assert_equal("", result)
-end 
+end
 
 function testGetEnglishSubStringWithEndIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 5, 8)
     assert_equal("efgh", result)
-end 
+end
 
 function testGetEnglishSubStringWithFirstStartIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 1, 12)
     assert_equal("abcdefghijkl", result)
-end 
+end
 
 function testGetEnglishSubStringWithLastStartIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 14, 30)
     assert_equal("n", result)
-end 
+end
 
 function testGetEnglishSubStringWithLargerStartIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 20, 30)
     assert_equal("", result)
-end 
+end
 
 function testGetEnglishSubStringWithSameIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 5, 5)
     assert_equal("e", result)
-end 
+end
 
 function testGetEnglishSubStringWithLargerEndIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 7, 30)
     assert_equal("ghijklmn", result)
-end 
+end
 
 function testGetEnglishSubStringWithStartLargerThanEndIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 8, 4)
     assert_equal("", result)
-end 
+end
 
 function testGetEnglishSubStringWithMinusStartIndexAndEndIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, -2, 9)
     assert_equal("", result)
-end 
+end
 
 function testGetEnglishSubStringWithStartAndMinusEndIndex()
     local input = "abcdefghijklmn"
     local result = string.utf8str(input, 10, -2)
     assert_equal("jklm", result)
-end 
+end
 
 function testGetUtf8SubString()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 3)
     assert_equal("たしI我わたしI我わたし", result)
-end 
+end
 
 function testGetUtf8SubStringWithMinusIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, -1)
     assert_equal("し", result)
-end 
+end
 
 function testGetUtf8SubStringWithZeroIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 0)
     assert_equal("我わたしI我わたしI我わたし", result)
-end 
+end
 
 function testGetUtf8SubStringWithFirstIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 1)
     assert_equal("我わたしI我わたしI我わたし", result)
-end 
+end
 
 function testGetUtf8SubStringWithLastIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 14)
     assert_equal("し", result)
-end 
+end
 
 function testGetUtf8SubStringWithLargerIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 20)
     assert_equal("", result)
-end 
+end
 
 function testGetUtf8SubStringWithEndIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 5, 8)
     assert_equal("I我わた", result)
-end 
+end
 
 function testGetUtf8SubStringWithFirstStartIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 1, 12)
     assert_equal("我わたしI我わたしI我わ", result)
-end 
+end
 
 function testGetUtf8SubStringWithLastStartIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 14, 30)
     assert_equal("し", result)
-end 
+end
 
 function testGetUtf8SubStringWithLargerStartIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 20, 30)
     assert_equal("", result)
-end 
+end
 
 function testGetUtf8SubStringWithSameIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 6, 6)
     assert_equal("我", result)
-end 
+end
 
 function testGetUtf8SubStringWithLargerEndIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 7, 30)
     assert_equal("わたしI我わたし", result)
-end 
+end
 
 function testGetUtf8SubStringWithStartLargerThanEndIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 8, 4)
     assert_equal("", result)
-end 
+end
 
 function testGetUtf8SubStringWithMinusStartIndexAndEndIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, -2, 9)
     assert_equal("", result)
-end 
+end
 
 function testGetUtf8SubStringWithStartAndMinusEndIndex()
     local input = "我わたしI我わたしI我わたし"
     local result = string.utf8str(input, 10, -2)
     assert_equal("I我わた", result)
-end 
+end
 
 function testErrorInputString()
     assert_error(
@@ -1138,7 +1101,7 @@ function testErrorStartIndex()
         function()
             local input = ""
             local startIdx = nil
-            string.utf8str(input,startIdx)
+            string.utf8str(input, startIdx)
         end
     )
 end
@@ -1150,7 +1113,7 @@ function testSuccessNilEndIndex()
             local input = "abcdefg"
             local startIdx = 2
             local endIdx = nil
-            string.utf8str(input,startIdx, endIdx)
+            string.utf8str(input, startIdx, endIdx)
         end
     )
 end
@@ -1162,7 +1125,7 @@ function testErrorEndIndex()
             local input = "abcdefg"
             local startIdx = 2
             local endIdx = {}
-            string.utf8str(input,startIdx, endIdx)
+            string.utf8str(input, startIdx, endIdx)
         end
     )
 end

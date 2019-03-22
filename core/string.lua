@@ -1,7 +1,11 @@
 --[[
     MIT License
 
-    Copyright (c) 2018 HIBIKI
+    GitHub: https://github.com/toreinkun/lua-framework
+
+    Author: HIBIKI <toreinkun@gmail.com>
+
+    Copyright (c) 2018-Now HIBIKI <toreinkun@gmail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +26,6 @@
     SOFTWARE.
 ]]
 local string = string
-local tostring = tostring
 local table = table
 local pairs = pairs
 local type = type

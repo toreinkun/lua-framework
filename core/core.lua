@@ -1,3 +1,30 @@
+--[[
+    MIT License
+
+    GitHub: https://github.com/toreinkun/lua-framework
+
+    Author: HIBIKI <toreinkun@gmail.com>
+
+    Copyright (c) 2018-Now HIBIKI <toreinkun@gmail.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+]]
 local debug = debug
 local table = table
 local require = require
@@ -7,8 +34,11 @@ local setmetatable = setmetatable
 local getmetatable = getmetatable
 local rawset = rawset
 
+local CURRENT_MODULE_NAME = ...
+require(string.match(CURRENT_MODULE_NAME, "(.+[.])[^.]+$") .. "string")
+
 function traceback(baseLevel)
-    local ret = { }
+    local ret = {}
     local level = baseLevel or 2
     local stackBegan = false
     while true do
@@ -17,11 +47,11 @@ function traceback(baseLevel)
             break
         end
         if info.what == "C" then
-            table.insert(ret, string.format("%i\tC function %s",(level - baseLevel + 1), info.name))
+            table.insert(ret, string.format("%i\tC function %s", (level - baseLevel + 1), info.name))
             stackBegan = true
         else
             if info.source ~= "=(tail call)" or stackBegan then
-                table.insert(ret, string.format("%i\t[string \"%s\"]:%d in function %s",(level - baseLevel + 1), info.source, info.currentline, info.name or info.what))
+                table.insert(ret, string.format('%i\t[string "%s"]:%d in function %s', (level - baseLevel + 1), info.source, info.currentline, info.name or info.what))
                 stackBegan = true
             end
         end
@@ -60,21 +90,25 @@ function import(moduleName, currentModuleName)
     return require(moduleFullName)
 end
 
-function handler(obj, method)
-    return function(...)
-        return method(obj, ...)
-    end
-end
+-- function handler(method, obj)
+-- if obj then
+-- return function(...)
+--     return method(obj, ...)
+-- end
+-- else
+--     return method
+-- end
+-- end
 
 function clone(object)
-    local lookup_table = { }
+    local lookup_table = {}
     local function _copy(object)
         if type(object) ~= "table" then
             return object
         elseif lookup_table[object] then
             return lookup_table[object]
         end
-        local newObject = { }
+        local newObject = {}
         lookup_table[object] = newObject
         for key, value in pairs(object) do
             newObject[_copy(key)] = _copy(value)
@@ -90,33 +124,27 @@ function setglobal(name, value)
     return value
 end
 
---TODO
---[[
-function module(name)
+function module(name, ...)
     local M = _g[name]
-    if not M then 
+    if not M then
         M = {}
-        local ret, G = pcall(getfenv, 2)
-        G = ret and G or _g
-        setmetatable(M, { __index = G })
         setglobal(name, M)
-    end 
+        for _, func in ipairs(...) do
+            func(M)
+        end
+    end
     setfenv(2, M)
     return M
 end
---]]
 
---TODO
---[[
-setmetatable(_g, {
-    __newindex = function(_, name, value)
-        error(string.format("USE \" setglobal(%s, value) \" INSTEAD OF SET GLOBAL VARIABLE", tostring(name)), 0)
-    end
-} )
-]]
-
-local CURRENT_MODULE_NAME = ...
-require(string.match(CURRENT_MODULE_NAME, "(.+[.])[^.]+$") .. "string")
+setmetatable(
+    _g,
+    {
+        __newindex = function(_, name, value)
+            error(string.format('use "setglobal(%s, value)" instead of set global variable', tostring(name)), 0)
+        end
+    }
+)
 
 import(".io", CURRENT_MODULE_NAME)
 import(".table", CURRENT_MODULE_NAME)

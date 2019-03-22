@@ -25,13 +25,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-require "spec.lunit"
-require "spec.lunit-console"
-
-function unload(modulename)
-    package.loaded[modulename] = nil
-end
-
-require "spec.core.string_spec"
-
-lunit.main()
+import(".vector2")
+import(".circle2")
+import(".size2")
+import(".segment2")
+import(".rect2")
+import(".polygon2")
+import(".geometry")

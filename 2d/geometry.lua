@@ -25,13 +25,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-require "spec.lunit"
-require "spec.lunit-console"
+local math = math
+local M = setglobal("geometry2d", {})
 
-function unload(modulename)
-    package.loaded[modulename] = nil
-end
-
-require "spec.core.string_spec"
-
-lunit.main()
+return M

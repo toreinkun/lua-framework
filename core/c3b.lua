@@ -10,6 +10,8 @@ function M.new( _r,_g,_b )
     return { r = _r, g = _g, b = _b }
 end
 
+
+
 function M.forHex(hex)
 	assert(type(hex) == "number", string.format("the parameter of hex:%s is not number",tostring(hex)))
 	local b = hex % 256

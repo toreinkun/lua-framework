@@ -1,3 +1,30 @@
+--[[
+    MIT License
+
+    GitHub: https://github.com/toreinkun/lua-framework
+
+    Author: HIBIKI <toreinkun@gmail.com>
+
+    Copyright (c) 2018-Now HIBIKI <toreinkun@gmail.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+]]
 local math = math
 
 math.FLT_EPSILON = 1.192092896e-7
@@ -16,19 +43,22 @@ function math.newrandomseed()
     math.random()
 end
 
-local _roundPow10 = { 10, 100, 1000, 10000, 100000 }
--- 四舍五入
--- @param #number value
--- @param #int reserve
--- @return #int
+local _round_pow_10 = {10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000}
+local _round_half_1 = 0.50000001
+--[[
+    @desc:rounds off to giving decimal places
+    --@value:[#number]
+	--@reserve:[#int]
+    @return:[#number]
+]]
 function math.round(value, reserve)
     reserve = reserve or 0
 
     if reserve <= 0 then
-        value = math.floor(value + 0.50000001)
+        value = math.floor(value + _round_half_1)
     else
-        local p = _roundPow10[reserve] or math.pow(10, reserve)
-        value = math.floor(value * p + 0.50000001) / p
+        local p = _round_pow_10[reserve] or math.pow(10, reserve)
+        value = math.floor(value * p + _round_half_1) / p
     end
 
     return value
@@ -36,27 +66,32 @@ end
 
 local _pi_div_180 = math.pi / 180
 local _180_div_pi = 1 / _pi_div_180
--- 角度转弧度
--- @param radian #angle
--- @return #number
+--[[
+    @desc:convert angle to radian
+    --@angle:[#number]
+    @return:[#number]
+]]
 function math.angle2radian(angle)
     return angle * _pi_div_180
 end
 
--- 弧度转角度
--- @param radian #number
--- @return #number
+--[[
+    @desc:convert radian to angle
+    --@radian:[#number]
+    @return:[#number]
+]]
 function math.radian2angle(radian)
     return radian * _180_div_pi
 end
 
--- 计算夹紧到由第二个和第三个指定的参数所定义的范围内的第一个指定的参数的值
--- @param value #number
--- @param min_inclusive #number
--- @param max_inclusive #number
--- @return #number
-function math.clampf(value, min_inclusive, max_inclusive)
-    -- body
+--[[
+    @desc:clamp value to the range [min, max]
+    --@value:[#number]
+	--@min_inclusive:[#number]
+	--@max_inclusive:[#number]
+    @return:[#number]
+]]
+function math.clamp(value, min_inclusive, max_inclusive)
     local temp = 0
     if min_inclusive > max_inclusive then
         temp = min_inclusive
@@ -71,4 +106,49 @@ function math.clampf(value, min_inclusive, max_inclusive)
     else
         return max_inclusive
     end
+end
+
+function math.formatnumberthousands(value)
+end
+
+--[[
+    @desc:return (value >= threshold) ? 1 : 0
+    --@threshold:[#number]
+	--@value:[#number]
+    @return:[#number]
+]]
+function math.step(threshold, value)
+    return value >= threshold and 1 or 0
+end
+
+--[[
+    @desc:return x + s(y - x)
+    --@x:[#number]
+	--@y:[#number]
+	--@s:[#number] 
+    @return:[#number]
+]]
+function math.lerp(x, y, s)
+    return x + s * (y - x)
+end
+
+--[[
+    @desc:clamp value to the range [0, 1]
+    --@value:[#number]
+    @return:
+]]
+function math.saturate(value)
+    return value < 0 and 0 or (value > 1 and 1 or value)
+end
+
+--[[
+    @desc:return a smooth Hermite interpolation between 0 and 1
+    --@a:[#number]
+	--@b:[#number]
+	--@x:[#number]
+    @return:[#number]
+]]
+function math.smoothstep(a, b, x)
+    local t = math.saturate((x - a) / (b - a))
+    return t * t * (3.0 - (2.0 * t))
 end

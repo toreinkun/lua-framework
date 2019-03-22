@@ -25,13 +25,30 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-require "spec.lunit"
-require "spec.lunit-console"
+local math = math
+local vector2 = import(".vector2")
 
-function unload(modulename)
-    package.loaded[modulename] = nil
+local M = module("polygon2")
+
+setmetatable(
+    M,
+    {
+        __call = function(self, ...)
+            return M.new(...)
+        end
+    }
+)
+
+--[[
+    --@point:[2d.vector2#M<>]
+    @return:[2d.polygon2#M]
+]]
+function M.new(points)
+    
+    local tempPoints = {}
+    for i, point in ipairs(points) do 
+
+    end 
+    return {points = table. points}
 end
 
-require "spec.core.string_spec"
-
-lunit.main()

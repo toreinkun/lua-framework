@@ -1,3 +1,30 @@
+--[[
+    MIT License
+
+    GitHub: https://github.com/toreinkun/lua-framework
+
+    Author: HIBIKI <toreinkun@gmail.com>
+
+    Copyright (c) 2018-Now HIBIKI <toreinkun@gmail.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+]]
 local type = type
 local string = string
 local table = table
@@ -13,14 +40,14 @@ setmetatableindex_ = function(t, index)
     if type(t) == "userdata" then
         local peer = tolua.getpeer(t)
         if not peer then
-            peer = { }
+            peer = {}
             tolua.setpeer(t, peer)
         end
         setmetatableindex_(peer, index)
     else
         local mt = getmetatable(t)
-        if not mt then 
-            setmetatable(t, index) 
+        if not mt then
+            setmetatable(t, index)
         elseif not mt.__index then
             mt.__index = index
         elseif mt.__index ~= index then
@@ -29,33 +56,29 @@ setmetatableindex_ = function(t, index)
     end
 end
 setmetatableindex = setmetatableindex_
-    
-function class(classname, ...)
-    local cls = { __cname = classname }
 
-    local supers = { ...}
+function class(classname, ...)
+    local cls = {__cname = classname}
+
+    local supers = {...}
     for _, super in ipairs(supers) do
         local superType = type(super)
-        assert(superType == "nil" or superType == "table" or superType == "function",
-        string.format("class() - create class \"%s\" with invalid super class type \"%s\"",
-        classname, superType))
+        assert(superType == "nil" or superType == "table" or superType == "function", string.format('class() - create class "%s" with invalid super class type "%s"', classname, superType))
 
         if superType == "function" then
-            assert(cls.__create == nil,
-            string.format("class() - create class \"%s\" with more than one creating function",
-            classname));
+            assert(cls.__create == nil, string.format('class() - create class "%s" with more than one creating function', classname))
             -- if super is function, set it to __create
             cls.__create = super
         elseif superType == "table" then
             if super[".isclass"] then
                 -- super is native class
-                assert(cls.__create == nil,
-                string.format("class() - create class \"%s\" with more than one creating function or native class",
-                classname));
-                cls.__create = function() return super:create() end
+                assert(cls.__create == nil, string.format('class() - create class "%s" with more than one creating function or native class', classname))
+                cls.__create = function()
+                    return super:create()
+                end
             else
                 -- super is pure lua class
-                cls.__supers = cls.__supers or { }
+                cls.__supers = cls.__supers or {}
                 cls.__supers[#cls.__supers + 1] = super
                 if not cls.super then
                     -- set first super pure lua class as class.super
@@ -63,36 +86,41 @@ function class(classname, ...)
                 end
             end
         else
-            error(string.format("class() - create class \"%s\" with invalid super type",
-            classname), 0)
+            error(string.format('class() - create class "%s" with invalid super type', classname), 0)
         end
     end
 
     cls.__index = cls
     if not cls.__supers or #cls.__supers == 1 then
-        setmetatable(cls, { __index = cls.super })
+        setmetatable(cls, {__index = cls.super})
     else
-        setmetatable(cls, {
-            __index = function(_, key)
-                local supers = cls.__supers
-                for i = 1, #supers do
-                    local super = supers[i]
-                    if super[key] then return super[key] end
+        setmetatable(
+            cls,
+            {
+                __index = function(_, key)
+                    local supers = cls.__supers
+                    for i = 1, #supers do
+                        local super = supers[i]
+                        if super[key] then
+                            return super[key]
+                        end
+                    end
                 end
-            end
-        } )
+            }
+        )
     end
 
     if not cls.ctor then
         -- add default constructor
-        cls.ctor = function() end
+        cls.ctor = function()
+        end
     end
     cls.new = function(...)
         local instance
         if cls.__create then
             instance = cls.__create(...)
         else
-            instance = { }
+            instance = {}
         end
         setmetatableindex(instance, cls)
         instance.class = cls
@@ -113,9 +141,9 @@ function class(classname, ...)
     cls.extend = function(instance, ...)
         -- 先继承C++对象
         setmetatableindex(instance, cls)
-        if not instance.class then 
+        if not instance.class then
             instance.class = cls
-        end 
+        end
         instance:ctor(...)
         return instance
     end
@@ -126,24 +154,36 @@ end
 local iskindof_
 iskindof_ = function(cls, name)
     local __index = rawget(cls, "__index")
-    if type(__index) == "table" and rawget(__index, "__cname") == name then return true end
+    if type(__index) == "table" and rawget(__index, "__cname") == name then
+        return true
+    end
 
-    if rawget(cls, "__cname") == name then return true end
+    if rawget(cls, "__cname") == name then
+        return true
+    end
     local __supers = rawget(cls, "__supers")
-    if not __supers then return false end
+    if not __supers then
+        return false
+    end
     for _, super in ipairs(__supers) do
-        if iskindof_(super, name) then return true end
+        if iskindof_(super, name) then
+            return true
+        end
     end
     return false
 end
 
 function iskindof(obj, classname)
     local t = type(obj)
-    if t ~= "table" and t ~= "userdata" then return false end
+    if t ~= "table" and t ~= "userdata" then
+        return false
+    end
 
     local mt
     if t == "userdata" then
-        if tolua.iskindof(obj, classname) then return true end
+        if tolua.iskindof(obj, classname) then
+            return true
+        end
         mt = tolua.getpeer(obj)
     else
         mt = getmetatable(obj)

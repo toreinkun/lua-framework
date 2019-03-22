@@ -25,13 +25,36 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-require "spec.lunit"
-require "spec.lunit-console"
+local math = math
+local vector2 = import(".vector2")
 
-function unload(modulename)
-    package.loaded[modulename] = nil
+local M = module("triangle2")
+
+setmetatable(
+    M,
+    {
+        __call = function(self, ...)
+            return M.new(...)
+        end
+    }
+)
+
+--[[
+    --@a:[2d.vector2#M<>]
+    --@b:[2d.vector2#M<>]
+    --@c:[2d.vector2#M<>]
+    @return:[2d.triangle2#M]
+]]
+function M.new(a, b, c)
+    -- ab X ac == 0, parallel or collinear
+    return {a = a, b = b, c = c}
 end
 
-require "spec.core.string_spec"
+function M.containsPoint(triangle, point)
+end
 
-lunit.main()
+function M.equals()
+end
+
+function M.clone()
+end

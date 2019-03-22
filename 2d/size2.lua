@@ -25,13 +25,50 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ]]
-require "spec.lunit"
-require "spec.lunit-console"
+local M = module("size2")
 
-function unload(modulename)
-    package.loaded[modulename] = nil
+setmetatable(
+    M,
+    {
+        __call = function(self, ...)
+            return M.new(...)
+        end
+    }
+)
+
+--[[
+    --@width:[#number]
+	--@height:[#number] 
+    @return:[2d.size2#M]
+]]
+function M.new(width, height)
+    return {width = width, height = height}
 end
 
-require "spec.core.string_spec"
+--[[
+    --@a:[2d.size2#M] 
+    @return:[#number]
+]]
+function M.area(a)
+    return a.width * a.height
+end
 
-lunit.main()
+--[[
+    @desc:a == b
+    --@a:[2d.size2#M]
+	--@b:[2d.size2#M]
+    @return:[#boolean]
+]]
+function M.equals(a, b)
+    return a.width == b.width and a.height == b.height
+end
+
+--[[
+    --@a:[2d.size2#M] 
+    @return:[2d.size2#M]
+]]
+function M.clone(a)
+    return M.new(a.width, a.height)
+end
+
+return M
